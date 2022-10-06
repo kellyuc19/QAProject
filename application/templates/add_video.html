@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body_content %}
+    <section>
+        <br>
+        <div class="form">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.video_link.label }}
+                    {{ form.video_link }}
+                    <br>
+                    {{ form.video_date.label }}
+                    {{ form.video_date }}
+                    {{ form.submit }}
+                </div>
+            </form>
+            {{ message }}
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body_content %}
+    <div class="display">
+         <table id="data" class="table table-striped">
+            <thead>
+              <tr>
+                <th>Video ID</th>
+                <th>Module ID</th>
+                <th>Video Date</th>
+                <th>Video Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for video in videos %}
+                <tr>
+                  <td>{{ video.video_id }}</td>
+                  <td>{{ video.module_id }}</td>
+                  <td>{{ video.video_date }}</td>
+                  <td>{{ video.video_link }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+         </table>
+    </div>
+{% endblock %}

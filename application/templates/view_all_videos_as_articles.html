@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body_content %}
+    <div class="display">
+        {% for game in games %}
+          <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                <h4 class="article-title">{{ game.id }}</h4>
+                <p class="article-content">{{ game.name }}</p>
+            </div>
+          </article>
+        {% endfor %}
+    </div>
+{% endblock %}
