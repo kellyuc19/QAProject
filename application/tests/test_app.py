@@ -3,7 +3,7 @@ from flask_testing import TestCase
 
 # import the app's classes and objects
 from application import app, db
-from application.models import Games, Users
+from application.models import Games, Users, Videos
 
 # Create the base class
 class TestBase(TestCase):
@@ -23,12 +23,12 @@ class TestBase(TestCase):
         # Create table
         db.create_all()
         # Create test registree
-        game1 = Games(name="monopoly")
+        video1 = Videos(name="Flask")
         # save users to database
-        db.session.add(game1)
-        game2 = Games(name="scrabble")
+        db.session.add(video1)
+        video2 = Videos(name="Basic Python")
         # save users to database
-        db.session.add(game2)
+        db.session.add(video2)
         db.session.commit()
 
     # Will be called after every test
@@ -40,104 +40,104 @@ class TestBase(TestCase):
 # Write a test class to test Read functionality
 class TestViews(TestBase):
     def test_home_get(self):
-        response = self.client.get(url_for('view_all_games_as_articles'))
+        response = self.client.get(url_for('view_all_vidoes_as_articles'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'monopoly', response.data)
-        self.assertIn(b'scrabble', response.data)
+        self.assertIn(b'Flask', response.data)
+        self.assertIn(b'Python', response.data)
 
-    def test_add_game_with_capital_letter_home_post(self):
+    def test_add_video_with_capital_letter_home_post(self):
         response = self.client.post(url_for('add'),
-            data = dict(name='Kerplunk'))
+            data = dict(name='Python Advance'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"kerplunk has been successfully added to the database", response.data)
+        self.assertIn(b"Python Advance has been successfully added to the database", response.data)
 
-        response = self.client.get(url_for('view_all_games_as_articles'))
-        self.assertIn(b'monopoly', response.data)
-        self.assertIn(b'scrabble', response.data)
-        self.assertIn(b'kerplunk', response.data)
-        self.assertEqual(3, Games.query.count())
+        response = self.client.get(url_for('view_all_videos_as_articles'))
+        self.assertIn(b'Flask', response.data)
+        self.assertIn(b'Basic Python', response.data)
+        self.assertIn(b'Pthon Advance', response.data)
+        self.assertEqual(3, Videos.query.count())
 
-    def test_add_empty_string_as_game_home_post(self):
+    def test_add_empty_string_as_video_home_post(self):
         response = self.client.post(url_for('add'),
             data = dict(name=''))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Game name invalid. Please try again", response.data)
+        self.assertIn(b"Video name invalid. Please try again", response.data)
 
 
     def test_add_None_as_name_home_post(self):
         response = self.client.post(url_for('add'),
             data = dict(name=None))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Game name invalid. Please try again", response.data)
+        self.assertIn(b"Video name invalid. Please try again", response.data)
 
 
-    def test_update_game_with_capital_letter_old_andNew_games_home_post(self):
+    def test_update_video_with_capital_letter_old_andNew_videos_home_post(self):
         response = self.client.post(url_for('update'),
-            data = dict(oldname='Monopoly', newname='Boggle'))
+            data = dict(oldname='Flask', newname='Python'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"monopoly has been altered to boggle", response.data)
+        self.assertIn(b"Flask has been altered to boggle", response.data)
 
-        response = self.client.get(url_for('view_all_games_as_articles'))
-        self.assertIn(b'boggle', response.data)
-        self.assertIn(b'scrabble', response.data)
-        self.assertEqual(2, Games.query.count())
+        response = self.client.get(url_for('view_all_videos_as_articles'))
+        self.assertIn(b'Python', response.data)
+        self.assertIn(b'Flask', response.data)
+        self.assertEqual(2, Videos.query.count())
 
 
     def test_update_oldname_as_empty_string_home_post(self):
         response = self.client.post(url_for('update'),
-            data = dict(oldname='', newname='Boggle'))
+            data = dict(oldname='', newname='Flask'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Game name invalid. Please try again", response.data)
+        self.assertIn(b"Flask name invalid. Please try again", response.data)
 
 
     def test_update_newname_as_empty_string_home_post(self):
         response = self.client.post(url_for('update'),
-            data = dict(oldname='Monopoly', newname=''))
+            data = dict(oldname='Flask', newname=''))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Game name invalid. Please try again", response.data)
+        self.assertIn(b"Vidoe name invalid. Please try again", response.data)
 
 
     def test_update_None_as_name_home_post(self):
         response = self.client.post(url_for('update'),
-            data = dict(oldname=None, newname='Boggle'))
+            data = dict(oldname=None, newname='Flask'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Game name invalid. Please try again", response.data)
+        self.assertIn(b"Video name invalid. Please try again", response.data)
 
 
     def test_update_oldname_is_not_in_database_home_post(self):
         response = self.client.post(url_for('update'),
-            data = dict(oldname='Mouse Trap', newname='Boggle'))
+            data = dict(oldname='Python Basics', newname='Flask'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Game could not be found. Please enter a valid game.", response.data)
+        self.assertIn(b"Video could not be found. Please enter a valid game.", response.data)
 
-    def test_delete_game_with_capital_letter_game_name_home_post(self):
+    def test_delete_videoe_with_capital_letter_video_name_home_post(self):
         response = self.client.post(url_for('delete'),
-            data = dict(name='Monopoly'))
+            data = dict(name='Flask'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"monopoly has been successfully removed from the database", response.data)
+        self.assertIn(b"flask has been successfully removed from the database", response.data)
 
-        response = self.client.get(url_for('view_all_games_as_articles'))
-        self.assertIn(b'scrabble', response.data)
-        self.assertEqual(1, Games.query.count())
+        response = self.client.get(url_for('view_all_videos_as_articles'))
+        self.assertIn(b'Python', response.data)
+        self.assertEqual(1, Videos.query.count())
 
-    def test_delete_game_that_does_not_exist_home_post(self):
+    def test_delete_video_that_does_not_exist_home_post(self):
         response = self.client.post(url_for('delete'),
-            data = dict(name='Kerplunk'))
+            data = dict(name='Python'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Game could not be found. Please enter a valid game.", response.data)
+        self.assertIn(b"Video could not be found. Please enter a valid game.", response.data)
 
-        response = self.client.get(url_for('view_all_games_as_articles'))
-        self.assertIn(b'monopoly', response.data)
-        self.assertIn(b'scrabble', response.data)
-        self.assertEqual(2, Games.query.count())
+        response = self.client.get(url_for('view_all_videos_as_articles'))
+        self.assertIn(b'Flask', response.data)
+        self.assertIn(b'Python', response.data)
+        self.assertEqual(2, Videos.query.count())
 
-    def test_delete_game_with_empty_string_as_name_home_post(self):
+    def test_delete_video_with_empty_string_as_name_home_post(self):
         response = self.client.post(url_for('delete'),
                                     data=dict(name=''))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Game name invalid. Please try again", response.data)
+        self.assertIn(b"Video name invalid. Please try again", response.data)
 
-        response = self.client.get(url_for('view_all_games_as_articles'))
-        self.assertIn(b'monopoly', response.data)
-        self.assertIn(b'scrabble', response.data)
-        self.assertEqual(2, Games.query.count())
+        response = self.client.get(url_for('view_all_videos_as_articles'))
+        self.assertIn(b'flask', response.data)
+        self.assertIn(b'python', response.data)
+        self.assertEqual(2, Videos.query.count())
