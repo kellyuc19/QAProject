@@ -1,4 +1,4 @@
-from application import db
+from application import db, app
 from application import models
 
 db.drop_all()

@@ -1,4 +1,5 @@
 from application import app, db
+from application import models
 from application.models import Videos, Users, Topics, Module 
 from application.forms import AddVideoForm, UpdateVideoForm, DeleteVideoForm, RegistrationForm, LoginForm
 from flask import Flask, request, render_template, url_for, redirect
@@ -128,7 +129,10 @@ def login():
                 return redirect('view_all_videos_as_articles')
     return render_template('login.html', title='Login', form=form)
 
-
-
-
-
+@app.before_first_request
+def createdb():
+    db.create_all()
+    testuser = models.Users(first_name='Kelly',last_name='Felix',city='London',tel='384849',cohort='Cohort23',pathway='DevOps',email='ed@hot.com',password='password',) # Extra: this section populates the table with an example entry
+    db.session.add(testuser)
+    db.session.commit()
+    return render_template('view_all_videos_as_articles.html')
