@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  web:
+    image: kellyuc19/video_app
+    environment:
+      - db_connection=mysql+pymysql://flask:flask@db:3306/videos
+      - PYTHONUNBUFFERED=1
+    ports:
+      - 5000:5000
+    deploy:
+      replicas: 1
+    depends_on:
+      - db
+    restart: always
+    
+  db:
+    image: mysql:8
+    ports:
+      - published: 3306
+        target: 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=flask
+      - MYSQL_USER=flask
+      - MYSQL_PASSWORD=flask
+      - MYSQL_DATABASE=videos
+    volumes:
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
