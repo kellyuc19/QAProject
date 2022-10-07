@@ -1,0 +1,11 @@
+**/__pycache__/
+**/venv/
+*.db
+create.py
+.create.py
+Dockerfile
+*.md
+Jenjinsfile
+*.git
+.git
+*.pem
