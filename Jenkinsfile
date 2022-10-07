@@ -1,6 +1,6 @@
 pipeline{
     environment {
-        registry = "<username>/flaskdemo"
+        registry = "kellyuc19/video_app"
         registryCredentials = "dockerhub_id"
         dockerImage = ""
         HOME = "${env.WORKSPACE}"
